@@ -24,13 +24,15 @@ const db = getFirestore(app);
 export const logInWithEmailAndPassword = async (
   email: string,
   password: string,
-  dispatch: Dispatch<AnyAction>
+  dispatch: Dispatch<AnyAction>,
+  navigate: NavigateFunction
 ) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
     const token = await response.user.getIdToken();
     localStorage.setItem('authToken', token);
     dispatch(login());
+    navigate('/');
   } catch (err) {
     console.error(err);
   }

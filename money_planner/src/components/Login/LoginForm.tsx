@@ -5,6 +5,7 @@ import { logInWithEmailAndPassword } from '../../firebase';
 import { useAppDispatch } from '../../hooks';
 
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Form = styled.form`
   display: flex;
@@ -16,6 +17,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('test@test.hu');
   const [password, setPassword] = useState('test123');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -32,7 +34,7 @@ const LoginForm = () => {
   const onSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
-    await logInWithEmailAndPassword(email, password, dispatch);
+    await logInWithEmailAndPassword(email, password, dispatch, navigate);
   };
 
   return (
