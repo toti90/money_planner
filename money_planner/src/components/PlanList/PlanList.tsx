@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { Category, MOCK_MONTHLYPLANS } from '../../mock/money-plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
 import { useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
 
 const CardContainer = styled.div`
   display: flex;
@@ -35,10 +36,19 @@ const PlanList = () => {
     <MainContainer>
       <ButtonSubHeader></ButtonSubHeader>
       <h1>{currentPlan?.name}</h1>
+      <Button
+        variant="contained"
+        type="button"
+        color="secondary"
+        sx={{ width: '275px', marginBottom: '16px' }}
+      >
+        Add new Category
+      </Button>
       <CardContainer>
-        {currentPlan?.categories.map((x: Category, i: number) => (
-          <PlanCard category={x} key={i} />
-        ))}
+        {currentPlan?.categories &&
+          currentPlan?.categories.map((x: Category, i: number) => (
+            <PlanCard category={x} key={i} />
+          ))}
       </CardContainer>
     </MainContainer>
   );
