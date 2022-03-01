@@ -27,7 +27,10 @@ const MonthlyPlanCard: React.FC<{ category: Category }> = ({ category }) => {
 
   return (
     <Card sx={{ width: 275, marginRight: '24px', marginBottom: '16px' }}>
-      <CardHeader title={category.name}></CardHeader>
+      <CardHeader
+        title={category.name}
+        sx={{ fontWeight: 'bold' }}
+      ></CardHeader>
       <CardContent>
         <BorderLinearProgress
           variant="determinate"
@@ -41,7 +44,7 @@ const MonthlyPlanCard: React.FC<{ category: Category }> = ({ category }) => {
         </Spent>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button size="small" sx={{ textAlign: 'end' }}>
+        <Button size="small" sx={{ textAlign: 'end' }} color="secondary">
           Add new spending
         </Button>
       </CardActions>
