@@ -15,7 +15,10 @@ import {
   selectCurrentPlan,
   setCurrentPlan,
 } from '../../store/plan-slice';
-import NewPlanDialog from './NewPlanDialog';
+import OneInputDialog from '../Shared/OneInputDialog';
+import { generateGuid } from '../../helpers/guidGenerator';
+import { Plan } from '../../mock/money-plan';
+import { getPlans, writePlan } from '../../firebaseDatabase';
 
 const Container = styled.div`
   display: flex;
@@ -40,8 +43,18 @@ const ButtonsSubHeader = () => {
     setOpen(true);
   };
 
-  const closeDialogHandler = () => {
+  const closeDialogHandler = (isSave: boolean, result?: string) => {
     setOpen(false);
+    if (isSave && result) {
+      const newPlan: Plan = {
+        id: generateGuid(),
+        name: result,
+        categories: [],
+      };
+      writePlan(newPlan).then((x) => {
+        getPlans(dispatch);
+      });
+    }
   };
 
   const beVisible = currentPlan && allPlan.length > 0;
@@ -73,7 +86,13 @@ const ButtonsSubHeader = () => {
         >
           Add new Plan
         </Button>
-        <NewPlanDialog open={open} onClose={closeDialogHandler}></NewPlanDialog>
+        <OneInputDialog
+          open={open}
+          onClose={closeDialogHandler}
+          title="Add new plan"
+          label="Plan"
+          type="text"
+        ></OneInputDialog>
       </Container>
     );
   }
