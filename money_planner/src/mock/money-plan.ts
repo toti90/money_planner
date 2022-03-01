@@ -5,8 +5,7 @@ export interface MonthlyPlan {
 
 export interface Month {
   name: string;
-  year: number;
-  month: number;
+  date: Date;
 }
 
 export interface Category {
@@ -20,8 +19,7 @@ export const MOCK_MONTHLYPLANS: MonthlyPlan[] = [
   {
     month: {
       name: 'January',
-      year: 2022,
-      month: 1,
+      date: new Date(2022, 0, 1),
     },
     categories: [
       { id: 1, name: 'Bills', plannedSpent: 100000, actualSpent: 10000 },

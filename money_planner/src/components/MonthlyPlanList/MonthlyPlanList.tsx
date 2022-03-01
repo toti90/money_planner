@@ -2,6 +2,8 @@ import MonthlyPlanCard from '../Shared/MonthlyPlanCard';
 import styled from 'styled-components';
 import { MOCK_MONTHLYPLANS } from '../../mock/money-plan';
 import ButtonSubHeader from './ButtonsSubHeader';
+import { selectCurrentMonth } from '../../store/monthlyPlan-slice';
+import { useAppSelector } from '../../hooks';
 
 const CardContainer = styled.div`
   display: flex;
@@ -15,12 +17,13 @@ const MainContainer = styled.div`
 `;
 
 const MonthlyPlanList = () => {
-  const mockDatas = MOCK_MONTHLYPLANS;
+  const currentMonthlyPlan = useAppSelector(selectCurrentMonth);
+
   return (
     <MainContainer>
       <ButtonSubHeader></ButtonSubHeader>
       <CardContainer>
-        {mockDatas[0].categories.map((x) => (
+        {currentMonthlyPlan.categories.map((x) => (
           <MonthlyPlanCard category={x} key={x.id} />
         ))}
       </CardContainer>
