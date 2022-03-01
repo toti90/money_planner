@@ -29,15 +29,6 @@ const OneInputDialog: React.FC<{
 
   const handleSave = () => {
     onClose(true, inputValue);
-    // const newPlan: Plan = {
-    //   id: generateGuid(),
-    //   name: planName,
-    //   categories: [],
-    // };
-    // writePlan(newPlan).then((x) => {
-    //   getPlans(dispatch);
-    //   onClose();
-    // });
   };
 
   return (

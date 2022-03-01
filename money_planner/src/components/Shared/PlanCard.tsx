@@ -7,9 +7,13 @@ import {
   LinearProgress,
   styled,
 } from '@mui/material';
-import React from 'react';
-import { Category } from '../../mock/money-plan';
+import React, { useState } from 'react';
+import { Category, Plan } from '../../mock/money-plan';
 import styles from 'styled-components';
+import OneInputDialog from './OneInputDialog';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { selectCurrentPlan } from '../../store/plan-slice';
+import { getPlans, writePlan } from '../../firebaseDatabase';
 
 const Spent = styles.p`
   text-align: end;
@@ -22,7 +26,33 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
+  const [open, setOpen] = useState(false);
+  const currentPlan = useAppSelector(selectCurrentPlan);
   const progress = (category.actualSpent / category.plannedSpent) * 100;
+  const dispatch = useAppDispatch();
+
+  const openDialogHandler = () => {
+    setOpen(true);
+  };
+
+  const closeDialogHandler = (isSave: boolean, result?: string) => {
+    setOpen(false);
+    if (isSave && result) {
+      let newPlan: Plan = {
+        ...currentPlan!,
+        categories: currentPlan!.categories.map((x) => {
+          if (x.name === category.name) {
+            return { ...x, actualSpent: x.actualSpent + Number(result) };
+          }
+          return x;
+        }),
+      };
+
+      writePlan(newPlan).then((_) => {
+        getPlans(dispatch);
+      });
+    }
+  };
 
   return (
     <Card sx={{ width: 275, marginRight: '24px', marginBottom: '16px' }}>
@@ -43,10 +73,22 @@ const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
         </Spent>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button size="small" sx={{ textAlign: 'end' }} color="secondary">
+        <Button
+          size="small"
+          sx={{ textAlign: 'end' }}
+          color="secondary"
+          onClick={openDialogHandler}
+        >
           Add new spending
         </Button>
       </CardActions>
+      <OneInputDialog
+        open={open}
+        onClose={closeDialogHandler}
+        title={`Add new spent to ${category.name}`}
+        label="Amount"
+        type="number"
+      ></OneInputDialog>
     </Card>
   );
 };
