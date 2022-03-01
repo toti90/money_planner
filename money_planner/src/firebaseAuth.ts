@@ -1,7 +1,6 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 import { Dispatch } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { login, logout } from './store/auth-slice';
@@ -14,12 +13,13 @@ const firebaseConfig = {
   storageBucket: 'money-planner-bb183.appspot.com',
   messagingSenderId: '967258468968',
   appId: '1:967258468968:web:003d84c20f1eb6ffc6c1dd',
+  databaseURL:
+    'https://money-planner-bb183-default-rtdb.europe-west1.firebasedatabase.app',
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 export const logInWithEmailAndPassword = async (
   email: string,

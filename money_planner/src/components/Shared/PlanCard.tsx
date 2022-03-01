@@ -5,7 +5,6 @@ import {
   CardContent,
   CardHeader,
   LinearProgress,
-  linearProgressClasses,
   styled,
 } from '@mui/material';
 import React from 'react';
@@ -22,7 +21,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   borderRadius: 5,
 }));
 
-const MonthlyPlanCard: React.FC<{ category: Category }> = ({ category }) => {
+const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
   const progress = (category.actualSpent / category.plannedSpent) * 100;
 
   return (
@@ -52,4 +51,4 @@ const MonthlyPlanCard: React.FC<{ category: Category }> = ({ category }) => {
   );
 };
 
-export default MonthlyPlanCard;
+export default PlanCard;

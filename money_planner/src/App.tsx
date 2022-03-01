@@ -1,12 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
-import MainPage from './pages/Layout';
 import { selectIsLoggedIn } from './store/auth-slice';
 import { useAppSelector } from './hooks';
-import MonthlyPlanList from './components/MonthlyPlanList/MonthlyPlanList';
-import NewMonthlyPlan from './components/NewMonthlyPlan/NewMonthlyPlan';
+import PlanList from './components/PlanList/PlanList';
 import Layout from './pages/Layout';
+import NewPlan from './components/NewPlan/NewPlan';
 
 function App() {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -18,8 +17,8 @@ function App() {
         path="/"
         element={isLoggedIn ? <Layout /> : <Navigate to="/login" />}
       >
-        <Route path="/" element={<MonthlyPlanList />}></Route>
-        <Route path="add" element={<NewMonthlyPlan />}></Route>
+        <Route path="/" element={<PlanList />}></Route>
+        <Route path="add" element={<NewPlan />}></Route>
       </Route>
       <Route path="*" element={<NotFoundPage />}></Route>
     </Routes>

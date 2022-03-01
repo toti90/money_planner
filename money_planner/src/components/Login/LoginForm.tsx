@@ -1,7 +1,7 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import React, { FormEvent, useState } from 'react';
-import { logInWithEmailAndPassword } from '../../firebase';
+import { logInWithEmailAndPassword } from '../../firebaseAuth';
 import { useAppDispatch } from '../../hooks';
 
 import styled from 'styled-components';

@@ -1,11 +1,9 @@
-export interface MonthlyPlan {
-  month: Month;
-  categories: Category[];
-}
+import { v4 as uuidv4 } from 'uuid';
 
-export interface Month {
+export interface Plan {
+  id: string;
   name: string;
-  date: Date;
+  categories: Category[];
 }
 
 export interface Category {
@@ -15,12 +13,10 @@ export interface Category {
   actualSpent: number;
 }
 
-export const MOCK_MONTHLYPLANS: MonthlyPlan[] = [
+export const MOCK_MONTHLYPLANS: Plan[] = [
   {
-    month: {
-      name: 'January',
-      date: new Date(2022, 0, 1),
-    },
+    id: uuidv4(),
+    name: '2022-January',
     categories: [
       { id: 1, name: 'Bills', plannedSpent: 100000, actualSpent: 10000 },
       { id: 2, name: 'Car', plannedSpent: 100000, actualSpent: 80000 },

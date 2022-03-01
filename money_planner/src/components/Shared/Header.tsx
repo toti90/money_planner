@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import styles from 'styled-components';
-import { logoutUser } from '../../firebase';
+import { logoutUser } from '../../firebaseAuth';
 import { useAppDispatch } from '../../hooks';
 
 const HeaderContainer = styles.div`
