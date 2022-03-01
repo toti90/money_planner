@@ -15,7 +15,7 @@ import {
   selectCurrentPlan,
   setCurrentPlan,
 } from '../../store/plan-slice';
-import OneInputDialog from '../Shared/OneInputDialog';
+import NewPlanDialog from './NewPlanDialog';
 
 const Container = styled.div`
   display: flex;
@@ -73,12 +73,7 @@ const ButtonsSubHeader = () => {
         >
           Add new Plan
         </Button>
-        <OneInputDialog
-          open={open}
-          title={'Add new plan'}
-          label={'Plan name'}
-          onClose={closeDialogHandler}
-        ></OneInputDialog>
+        <NewPlanDialog open={open} onClose={closeDialogHandler}></NewPlanDialog>
       </Container>
     );
   }

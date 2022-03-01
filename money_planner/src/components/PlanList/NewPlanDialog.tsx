@@ -12,17 +12,15 @@ import { generateGuid } from '../../helpers/guidGenerator';
 import { getPlans, writePlan } from '../../firebaseDatabase';
 import { useAppDispatch } from '../../hooks';
 
-const OneInputDialog: React.FC<{
+const NewPlanDialog: React.FC<{
   open: boolean;
-  title: string;
-  label: string;
   onClose: () => void;
-}> = ({ open, title, label, onClose }) => {
-  const [input, setInput] = useState('');
+}> = ({ open, onClose }) => {
+  const [planName, setPlanName] = useState('');
   const dispatch = useAppDispatch();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
+  const handlePlanNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPlanName(event.target.value);
   };
 
   const handleClose = () => {
@@ -32,7 +30,7 @@ const OneInputDialog: React.FC<{
   const handleSave = () => {
     const newPlan: Plan = {
       id: generateGuid(),
-      name: input,
+      name: planName,
       categories: [],
     };
     writePlan(newPlan).then((x) => {
@@ -43,16 +41,16 @@ const OneInputDialog: React.FC<{
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>Add new plan</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
           id="name"
-          label={label}
+          label="Plan name"
           type="text"
           fullWidth
-          onChange={handleInputChange}
+          onChange={handlePlanNameChange}
         />
       </DialogContent>
       <DialogActions>
@@ -63,4 +61,4 @@ const OneInputDialog: React.FC<{
   );
 };
 
-export default OneInputDialog;
+export default NewPlanDialog;

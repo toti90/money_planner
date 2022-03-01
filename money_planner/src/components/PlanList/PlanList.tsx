@@ -7,11 +7,12 @@ import {
   setAllPlan,
 } from '../../store/plan-slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Category, MOCK_MONTHLYPLANS } from '../../mock/money-plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
 import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
+import NewCategoryDialog from './NewCategoryDialog';
 
 const CardContainer = styled.div`
   display: flex;
@@ -25,12 +26,21 @@ const MainContainer = styled.div`
 `;
 
 const PlanList = () => {
+  const [open, setOpen] = useState(false);
   const currentPlan = useAppSelector(selectCurrentPlan);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     getPlans(dispatch);
   }, []);
+
+  const openDialogHandler = () => {
+    setOpen(true);
+  };
+
+  const closeDialogHandler = () => {
+    setOpen(false);
+  };
 
   return (
     <MainContainer>
@@ -41,6 +51,7 @@ const PlanList = () => {
         type="button"
         color="secondary"
         sx={{ width: '275px', marginBottom: '16px' }}
+        onClick={openDialogHandler}
       >
         Add new Category
       </Button>
@@ -50,6 +61,10 @@ const PlanList = () => {
             <PlanCard category={x} key={i} />
           ))}
       </CardContainer>
+      <NewCategoryDialog
+        open={open}
+        onClose={closeDialogHandler}
+      ></NewCategoryDialog>
     </MainContainer>
   );
 };
