@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Timestamp } from 'firebase/firestore';
 
 export interface Plan {
   id: string;
   name: string;
   categories: Category[];
+  createdDate: number;
 }
 
 export interface Category {
@@ -14,6 +16,7 @@ export interface Category {
 
 export const MOCK_MONTHLYPLANS: Plan[] = [
   {
+    createdDate: new Date().getTime(),
     id: uuidv4(),
     name: '2022-January',
     categories: [

@@ -49,7 +49,7 @@ const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
       };
 
       writePlan(newPlan).then((_) => {
-        getPlans(dispatch);
+        getPlans(dispatch, false);
       });
     }
   };
@@ -69,7 +69,7 @@ const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
           value={progress >= 100 ? 100 : progress}
         />
         <Spent>
-          {category.actualSpent} / {<strong>{category.plannedSpent} Ft</strong>}
+          {category.actualSpent} / {<strong>{category.plannedSpent} $</strong>}
         </Spent>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>

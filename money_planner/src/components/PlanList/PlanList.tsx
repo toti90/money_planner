@@ -31,6 +31,7 @@ const PlanList = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('list use effect');
     getPlans(dispatch);
   }, []);
 
@@ -45,26 +46,30 @@ const PlanList = () => {
   return (
     <MainContainer>
       <ButtonSubHeader></ButtonSubHeader>
-      <h1>{currentPlan?.name}</h1>
-      <Button
-        variant="contained"
-        type="button"
-        color="secondary"
-        sx={{ width: '275px', marginBottom: '16px' }}
-        onClick={openDialogHandler}
-      >
-        Add new Category
-      </Button>
-      <CardContainer>
-        {currentPlan?.categories &&
-          currentPlan?.categories.map((x: Category, i: number) => (
-            <PlanCard category={x} key={i} />
-          ))}
-      </CardContainer>
-      <NewCategoryDialog
-        open={open}
-        onClose={closeDialogHandler}
-      ></NewCategoryDialog>
+      {currentPlan && (
+        <>
+          <h1>{currentPlan?.name}</h1>
+          <Button
+            variant="contained"
+            type="button"
+            color="secondary"
+            sx={{ width: '275px', marginBottom: '16px' }}
+            onClick={openDialogHandler}
+          >
+            Add new Category
+          </Button>
+          <CardContainer>
+            {currentPlan?.categories &&
+              currentPlan?.categories.map((x: Category, i: number) => (
+                <PlanCard category={x} key={i} />
+              ))}
+          </CardContainer>
+          <NewCategoryDialog
+            open={open}
+            onClose={closeDialogHandler}
+          ></NewCategoryDialog>
+        </>
+      )}
     </MainContainer>
   );
 };

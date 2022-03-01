@@ -36,6 +36,7 @@ const NewCategoryDialog: React.FC<{
   };
 
   const handleSave = () => {
+    console.log('handleSave');
     const newPlan: Plan = {
       ...currentPlan!,
       categories: [
@@ -44,7 +45,7 @@ const NewCategoryDialog: React.FC<{
       ],
     };
     writePlan(newPlan).then((_) => {
-      getPlans(dispatch);
+      getPlans(dispatch, false);
       onClose();
     });
   };
@@ -65,7 +66,7 @@ const NewCategoryDialog: React.FC<{
         <TextField
           margin="dense"
           id="planned"
-          label="Planned spent"
+          label="Planned spent ($)"
           type="number"
           fullWidth
           onChange={handlePlannedSpentChange}

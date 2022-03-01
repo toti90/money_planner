@@ -6,7 +6,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -19,11 +19,16 @@ import OneInputDialog from '../Shared/OneInputDialog';
 import { generateGuid } from '../../helpers/guidGenerator';
 import { Plan } from '../../mock/money-plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
+import { Timestamp } from 'firebase/firestore';
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
+`;
+
+const Heading = styled.h1`
+  margin: 0;
 `;
 
 const ButtonsSubHeader = () => {
@@ -47,11 +52,13 @@ const ButtonsSubHeader = () => {
     setOpen(false);
     if (isSave && result) {
       const newPlan: Plan = {
+        createdDate: new Date().getTime(),
         id: generateGuid(),
         name: result,
         categories: [],
       };
       writePlan(newPlan).then((x) => {
+        console.log('button sub header');
         getPlans(dispatch);
       });
     }
@@ -96,7 +103,27 @@ const ButtonsSubHeader = () => {
       </Container>
     );
   }
-  return <div></div>;
+  return (
+    <Container>
+      <Heading>There are no plan, please create one</Heading>
+      <Button
+        variant="contained"
+        type="button"
+        color="secondary"
+        sx={{ width: '200px' }}
+        onClick={openDialogHandler}
+      >
+        Add first Plan
+      </Button>
+      <OneInputDialog
+        open={open}
+        onClose={closeDialogHandler}
+        title="Add new plan"
+        label="Plan"
+        type="text"
+      ></OneInputDialog>
+    </Container>
+  );
 };
 
 export default ButtonsSubHeader;
