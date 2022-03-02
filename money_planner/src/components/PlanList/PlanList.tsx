@@ -31,7 +31,6 @@ const PlanList = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log('list use effect');
     getPlans(dispatch);
   }, []);
 

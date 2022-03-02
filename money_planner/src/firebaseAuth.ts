@@ -4,6 +4,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Dispatch } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { login, logout } from './store/auth-slice';
+import { setIsLoading } from './store/global-slice';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,6 +28,7 @@ export const logInWithEmailAndPassword = async (
   dispatch: Dispatch<AnyAction>,
   navigate: NavigateFunction
 ) => {
+  dispatch(setIsLoading(true));
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
     const token = await response.user.getIdToken();
@@ -36,6 +38,7 @@ export const logInWithEmailAndPassword = async (
   } catch (err) {
     console.error(err);
   }
+  dispatch(setIsLoading(false));
 };
 
 export const logoutUser = async (

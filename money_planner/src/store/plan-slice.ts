@@ -36,7 +36,6 @@ export const planSlice = createSlice({
 export const { setCurrentPlan, setAllPlan, updateOnePlanInTheList } =
   planSlice.actions;
 
-// Other code such as selectors can use the imported `RootState` type
 export const selectCurrentPlan = (state: RootState) => state.plan.currentPlan;
 export const selectAllPlan = (state: RootState) => state.plan.allPlan;
 

@@ -66,7 +66,6 @@ export async function getPlanById(
   let snapshot = await get(child(dbRef, `plan/${id}`));
   if (snapshot.exists()) {
     const value = snapshot.val();
-    console.log(value);
     if (value) {
       let plan: Plan = value;
       const newPlan: Plan = {
