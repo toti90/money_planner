@@ -1,9 +1,11 @@
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
@@ -18,6 +20,7 @@ const NewCategoryDialog: React.FC<{
 }> = ({ open, onClose }) => {
   const [name, setName] = useState('');
   const [plannedSpent, setplannedSpent] = useState(0);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
   const currentPlan = useAppSelector(selectCurrentPlan);
   const dispatch = useAppDispatch();
 
@@ -36,7 +39,11 @@ const NewCategoryDialog: React.FC<{
   };
 
   const handleSave = () => {
-    console.log('handleSave');
+    if (currentPlan?.categories.some((x) => x.name === name)) {
+      setOpenSnackBar(true);
+      return;
+    }
+
     const newPlan: Plan = {
       ...currentPlan!,
       categories: [
@@ -48,6 +55,10 @@ const NewCategoryDialog: React.FC<{
       getPlans(dispatch, false);
       onClose();
     });
+  };
+
+  const handleSnackBarClose = () => {
+    setOpenSnackBar(false);
   };
 
   return (
@@ -76,6 +87,19 @@ const NewCategoryDialog: React.FC<{
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSave}>Save</Button>
       </DialogActions>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={3000}
+        onClose={handleSnackBarClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <Alert severity="warning" sx={{ width: '100%' }}>
+          This category name already in use
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };
