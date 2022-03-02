@@ -20,6 +20,7 @@ import { generateGuid } from '../../helpers/guidGenerator';
 import { Plan } from '../../mock/money-plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
 import { Timestamp } from 'firebase/firestore';
+import { selectIsLoading, setIsLoading } from '../../store/global-slice';
 
 const Container = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ const ButtonsSubHeader = () => {
   const [open, setOpen] = useState(false);
   const currentPlan = useAppSelector(selectCurrentPlan);
   const allPlan = useAppSelector(selectAllPlan);
+  const isLoading = useAppSelector(selectIsLoading);
   const dispatch = useAppDispatch();
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -51,6 +53,7 @@ const ButtonsSubHeader = () => {
   const closeDialogHandler = (isSave: boolean, result?: string) => {
     setOpen(false);
     if (isSave && result) {
+      dispatch(setIsLoading(true));
       const newPlan: Plan = {
         createdDate: new Date().getTime(),
         id: generateGuid(),
@@ -58,11 +61,15 @@ const ButtonsSubHeader = () => {
         categories: [],
       };
       writePlan(newPlan).then((x) => {
-        console.log('button sub header');
         getPlans(dispatch);
+        dispatch(setIsLoading(false));
       });
     }
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   const beVisible = currentPlan && allPlan.length > 0;
 

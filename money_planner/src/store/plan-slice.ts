@@ -22,10 +22,19 @@ export const planSlice = createSlice({
     setAllPlan: (state, action: PayloadAction<Plan[]>) => {
       state.allPlan = action.payload;
     },
+    updateOnePlanInTheList: (state, action: PayloadAction<Plan>) => {
+      state.allPlan = state.allPlan.map((x) => {
+        if (x.id === action.payload.id) {
+          return { ...action.payload };
+        }
+        return x;
+      });
+    },
   },
 });
 
-export const { setCurrentPlan, setAllPlan } = planSlice.actions;
+export const { setCurrentPlan, setAllPlan, updateOnePlanInTheList } =
+  planSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCurrentPlan = (state: RootState) => state.plan.currentPlan;

@@ -3,7 +3,12 @@ import { Plan } from './mock/money-plan';
 import { app } from './firebaseAuth';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
-import { setAllPlan, setCurrentPlan } from './store/plan-slice';
+import {
+  setAllPlan,
+  setCurrentPlan,
+  updateOnePlanInTheList,
+} from './store/plan-slice';
+import { setIsLoading } from './store/global-slice';
 
 const database = getDatabase(app);
 
@@ -19,12 +24,12 @@ export async function getPlans(
   dispatch: Dispatch<AnyAction>,
   needToUpdateCurrent: boolean = true
 ): Promise<void> {
+  dispatch(setIsLoading(true));
   const dbRef = ref(getDatabase());
   let plans: Plan[] = [];
   let snapshot = await get(child(dbRef, `plan`));
   if (snapshot.exists()) {
     const values = snapshot.val();
-    console.log(values);
     if (values) {
       const ids = Object.keys(values);
       for (let id of ids) {
@@ -35,7 +40,6 @@ export async function getPlans(
           categories: plan.categories,
           name: plan.name,
         };
-        console.log(newPlan);
         plans.push(newPlan);
       }
     }
@@ -44,10 +48,36 @@ export async function getPlans(
     if (plans.length > 1) {
       plans = plans.sort((a, b) => a.createdDate - b.createdDate);
     }
-    console.log(needToUpdateCurrent);
+
     if (needToUpdateCurrent) {
       dispatch(setCurrentPlan(plans[0]));
     }
     dispatch(setAllPlan(plans));
+    dispatch(setIsLoading(false));
+  }
+}
+
+export async function getPlanById(
+  dispatch: Dispatch<AnyAction>,
+  id: string
+): Promise<void> {
+  dispatch(setIsLoading(true));
+  const dbRef = ref(getDatabase());
+  let snapshot = await get(child(dbRef, `plan/${id}`));
+  if (snapshot.exists()) {
+    const value = snapshot.val();
+    console.log(value);
+    if (value) {
+      let plan: Plan = value;
+      const newPlan: Plan = {
+        createdDate: plan.createdDate,
+        id: id,
+        categories: plan.categories,
+        name: plan.name,
+      };
+      dispatch(setCurrentPlan(newPlan));
+      dispatch(updateOnePlanInTheList(plan));
+      dispatch(setIsLoading(false));
+    }
   }
 }

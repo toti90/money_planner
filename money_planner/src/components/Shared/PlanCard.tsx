@@ -13,7 +13,7 @@ import styles from 'styled-components';
 import OneInputDialog from './OneInputDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCurrentPlan } from '../../store/plan-slice';
-import { getPlans, writePlan } from '../../firebaseDatabase';
+import { getPlanById, getPlans, writePlan } from '../../firebaseDatabase';
 
 const Spent = styles.p`
   text-align: end;
@@ -49,7 +49,7 @@ const PlanCard: React.FC<{ category: Category }> = ({ category }) => {
       };
 
       writePlan(newPlan).then((_) => {
-        getPlans(dispatch, false);
+        getPlanById(dispatch, currentPlan!.id);
       });
     }
   };

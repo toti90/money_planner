@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { Plan } from '../../mock/money-plan';
-import { getPlans, writePlan } from '../../firebaseDatabase';
+import { getPlanById, getPlans, writePlan } from '../../firebaseDatabase';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCurrentPlan } from '../../store/plan-slice';
 
@@ -39,7 +39,10 @@ const NewCategoryDialog: React.FC<{
   };
 
   const handleSave = () => {
-    if (currentPlan?.categories.some((x) => x.name === name)) {
+    if (
+      currentPlan?.categories &&
+      currentPlan?.categories.some((x) => x.name === name)
+    ) {
       setOpenSnackBar(true);
       return;
     }
@@ -52,7 +55,7 @@ const NewCategoryDialog: React.FC<{
       ],
     };
     writePlan(newPlan).then((_) => {
-      getPlans(dispatch, false);
+      getPlanById(dispatch, currentPlan!.id);
       onClose();
     });
   };
