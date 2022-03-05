@@ -9,7 +9,6 @@ import {
 import { useState } from 'react';
 
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   selectAllPlan,
   selectCurrentPlan,
@@ -20,6 +19,7 @@ import { generateGuid } from '../../helpers/guidGenerator';
 import { Plan } from '../../models/plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
 import { selectIsLoading, setIsLoading } from '../../store/global-slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Container = styled.div`
   display: flex;
@@ -33,10 +33,10 @@ const Heading = styled.h1`
 
 const ButtonsSubHeader = () => {
   const [open, setOpen] = useState(false);
-  const currentPlan = useAppSelector(selectCurrentPlan);
-  const allPlan = useAppSelector(selectAllPlan);
-  const isLoading = useAppSelector(selectIsLoading);
-  const dispatch = useAppDispatch();
+  const currentPlan = useSelector(selectCurrentPlan);
+  const allPlan = useSelector(selectAllPlan);
+  const isLoading = useSelector(selectIsLoading);
+  const dispatch = useDispatch();
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const selectedPlan = allPlan.find((x) => x.id === event.target.value);
@@ -84,6 +84,7 @@ const ButtonsSubHeader = () => {
             value={currentPlan?.id}
             label="Age"
             onChange={handleChange}
+            data-testid="select"
           >
             {allPlan.map((x) => (
               <MenuItem value={x.id} key={x.id}>
@@ -100,7 +101,7 @@ const ButtonsSubHeader = () => {
         sx={{ width: '200px' }}
         onClick={openDialogHandler}
       >
-        Add {isNoPlanYet ? 'fisrt' : 'new'} Plan
+        Add {isNoPlanYet ? 'first' : 'new'} plan
       </Button>
       <OneInputDialog
         open={open}
