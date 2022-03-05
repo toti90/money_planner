@@ -70,11 +70,13 @@ const ButtonsSubHeader = () => {
     return <></>;
   }
 
-  const beVisible = currentPlan && allPlan.length > 0;
+  const isNoPlanYet = !(currentPlan && allPlan.length > 0);
 
-  if (beVisible) {
-    return (
-      <Container>
+  return (
+    <Container>
+      {isNoPlanYet ? (
+        <Heading>There are no plan, please create one</Heading>
+      ) : (
         <FormControl sx={{ width: 275 }}>
           <InputLabel>Plan</InputLabel>
           <Select
@@ -90,28 +92,7 @@ const ButtonsSubHeader = () => {
             ))}
           </Select>
         </FormControl>
-        <Button
-          variant="contained"
-          type="button"
-          color="secondary"
-          sx={{ width: '200px' }}
-          onClick={openDialogHandler}
-        >
-          Add new Plan
-        </Button>
-        <OneInputDialog
-          open={open}
-          onClose={closeDialogHandler}
-          title="Add new plan"
-          label="Plan"
-          type="text"
-        ></OneInputDialog>
-      </Container>
-    );
-  }
-  return (
-    <Container>
-      <Heading>There are no plan, please create one</Heading>
+      )}
       <Button
         variant="contained"
         type="button"
@@ -119,7 +100,7 @@ const ButtonsSubHeader = () => {
         sx={{ width: '200px' }}
         onClick={openDialogHandler}
       >
-        Add first Plan
+        Add {isNoPlanYet ? 'fisrt' : 'new'} Plan
       </Button>
       <OneInputDialog
         open={open}
