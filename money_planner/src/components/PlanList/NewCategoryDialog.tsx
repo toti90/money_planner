@@ -9,8 +9,8 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { Plan } from '../../mock/money-plan';
-import { getPlanById, getPlans, writePlan } from '../../firebaseDatabase';
+import { Plan } from '../../models/plan';
+import { getPlanById, writePlan } from '../../firebaseDatabase';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCurrentPlan } from '../../store/plan-slice';
 
@@ -54,6 +54,7 @@ const NewCategoryDialog: React.FC<{
         { name, actualSpent: 0, plannedSpent },
       ],
     };
+
     writePlan(newPlan).then((_) => {
       getPlanById(dispatch, currentPlan!.id);
       onClose();

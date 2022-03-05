@@ -1,5 +1,5 @@
-import { child, get, getDatabase, onValue, ref, set } from 'firebase/database';
-import { Plan } from './mock/money-plan';
+import { child, get, getDatabase, ref, set } from 'firebase/database';
+import { Plan } from './models/plan';
 import { app } from './firebaseAuth';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
@@ -33,14 +33,7 @@ export async function getPlans(
     if (values) {
       const ids = Object.keys(values);
       for (let id of ids) {
-        let plan: Plan = values[id];
-        const newPlan: Plan = {
-          createdDate: plan.createdDate,
-          id: id,
-          categories: plan.categories,
-          name: plan.name,
-        };
-        plans.push(newPlan);
+        plans.push({ ...values[id], id });
       }
     }
   }
@@ -67,14 +60,8 @@ export async function getPlanById(
   if (snapshot.exists()) {
     const value = snapshot.val();
     if (value) {
-      let plan: Plan = value;
-      const newPlan: Plan = {
-        createdDate: plan.createdDate,
-        id: id,
-        categories: plan.categories,
-        name: plan.name,
-      };
-      dispatch(setCurrentPlan(newPlan));
+      let plan: Plan = { ...value, id };
+      dispatch(setCurrentPlan(plan));
       dispatch(updateOnePlanInTheList(plan));
       dispatch(setIsLoading(false));
     }

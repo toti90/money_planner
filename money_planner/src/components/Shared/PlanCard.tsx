@@ -8,12 +8,12 @@ import {
   styled,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { Category, Plan } from '../../mock/money-plan';
+import { Category, Plan } from '../../models/plan';
 import styles from 'styled-components';
 import OneInputDialog from './OneInputDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCurrentPlan } from '../../store/plan-slice';
-import { getPlanById, getPlans, writePlan } from '../../firebaseDatabase';
+import { getPlanById, writePlan } from '../../firebaseDatabase';
 
 const Spent = styles.p`
   text-align: end;

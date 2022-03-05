@@ -1,16 +1,11 @@
 import PlanCard from '../Shared/PlanCard';
 import styled from 'styled-components';
 import ButtonSubHeader from './ButtonsSubHeader';
-import {
-  selectCurrentPlan,
-  setCurrentPlan,
-  setAllPlan,
-} from '../../store/plan-slice';
+import { selectCurrentPlan } from '../../store/plan-slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect, useState } from 'react';
-import { Category, MOCK_MONTHLYPLANS } from '../../mock/money-plan';
-import { getPlans, writePlan } from '../../firebaseDatabase';
-import { useDispatch } from 'react-redux';
+import { Category } from '../../models/plan';
+import { getPlans } from '../../firebaseDatabase';
 import { Button } from '@mui/material';
 import NewCategoryDialog from './NewCategoryDialog';
 
@@ -32,7 +27,7 @@ const PlanList = () => {
 
   useEffect(() => {
     getPlans(dispatch);
-  }, []);
+  }, [dispatch]);
 
   const openDialogHandler = () => {
     setOpen(true);

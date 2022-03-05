@@ -6,7 +6,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import React, { Fragment, useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -17,9 +17,8 @@ import {
 } from '../../store/plan-slice';
 import OneInputDialog from '../Shared/OneInputDialog';
 import { generateGuid } from '../../helpers/guidGenerator';
-import { Plan } from '../../mock/money-plan';
+import { Plan } from '../../models/plan';
 import { getPlans, writePlan } from '../../firebaseDatabase';
-import { Timestamp } from 'firebase/firestore';
 import { selectIsLoading, setIsLoading } from '../../store/global-slice';
 
 const Container = styled.div`
@@ -67,7 +66,7 @@ const ButtonsSubHeader = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading && !currentPlan) {
     return <></>;
   }
 
