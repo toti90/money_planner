@@ -60,7 +60,8 @@ const ButtonsSubHeader = () => {
         categories: [],
       };
       writePlan(newPlan).then((x) => {
-        getPlans(dispatch);
+        getPlans(dispatch, false);
+        dispatch(setCurrentPlan(newPlan));
         dispatch(setIsLoading(false));
       });
     }
