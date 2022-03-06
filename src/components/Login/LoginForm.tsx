@@ -1,6 +1,13 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
-import React, { FormEvent, useState } from 'react';
+import {
+  Alert,
+  Button,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from '@mui/material';
+import React, { FormEvent, Fragment, useState } from 'react';
 import { logInWithEmailAndPassword } from '../../firebaseAuth';
 import { useAppDispatch } from '../../hooks';
 
@@ -16,6 +23,7 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState('test@test.hu');
   const [password, setPassword] = useState('test123');
+  const [openSnackBar, setOpenSnackBar] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -34,43 +42,66 @@ const LoginForm = () => {
   const onSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
-    await logInWithEmailAndPassword(email, password, dispatch, navigate);
+    try {
+      await logInWithEmailAndPassword(email, password, dispatch, navigate);
+    } catch {
+      setOpenSnackBar(true);
+    }
+  };
+
+  const handleSnackBarClose = () => {
+    setOpenSnackBar(false);
   };
 
   return (
-    <Form onSubmit={onSubmitHandler}>
-      <TextField
-        required
-        id="email"
-        label="E-mail"
-        type="email"
-        sx={{ marginBottom: '20px' }}
-        value={email}
-        onChange={handleEmailChange}
-      />
-      <TextField
-        required
-        id="password"
-        label="Password"
-        type={showPassword ? 'text' : 'password'}
-        sx={{ marginBottom: '20px' }}
-        onChange={handlePasswordChange}
-        value={password}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              {' '}
-              <IconButton onClick={handleClickShowPassword}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
+    <Fragment>
+      <Form onSubmit={onSubmitHandler}>
+        <TextField
+          required
+          id="email"
+          label="E-mail"
+          type="email"
+          sx={{ marginBottom: '20px' }}
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <TextField
+          required
+          id="password"
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          sx={{ marginBottom: '20px' }}
+          onChange={handlePasswordChange}
+          value={password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {' '}
+                <IconButton onClick={handleClickShowPassword}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Button variant="outlined" type="submit">
+          LOGIN
+        </Button>
+      </Form>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={5000}
+        onClose={handleSnackBarClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
-      />
-      <Button variant="outlined" type="submit">
-        LOGIN
-      </Button>
-    </Form>
+      >
+        <Alert severity="error" sx={{ width: '100%' }}>
+          Your e-mail or password are incorrect
+        </Alert>
+      </Snackbar>
+    </Fragment>
   );
 };
 

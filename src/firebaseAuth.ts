@@ -36,9 +36,10 @@ export const logInWithEmailAndPassword = async (
     dispatch(login());
     navigate('/');
   } catch (err) {
-    console.error(err);
+    throw new Error('Login error happened');
+  } finally {
+    dispatch(setIsLoading(false));
   }
-  dispatch(setIsLoading(false));
 };
 
 export const logoutUser = async (
