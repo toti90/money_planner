@@ -100,6 +100,7 @@ const ButtonsSubHeader = () => {
         color="secondary"
         sx={{ width: '200px' }}
         onClick={openDialogHandler}
+        data-testid="openDialogButton"
       >
         Add {isNoPlanYet ? 'first' : 'new'} plan
       </Button>
@@ -109,6 +110,7 @@ const ButtonsSubHeader = () => {
         title="Add new plan"
         label="Plan"
         type="text"
+        data-testid="openDialog"
       ></OneInputDialog>
     </Container>
   );

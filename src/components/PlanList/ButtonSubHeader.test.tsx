@@ -1,11 +1,12 @@
-import { getByTestId, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ButtonsSubHeader from './ButtonsSubHeader';
 import { RootState } from '../../store';
 import { Plan } from '../../models/plan';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import { Middleware } from '@reduxjs/toolkit';
 
-const middlewares = [];
+const middlewares: Middleware[] = [];
 const mockStore = configureStore(middlewares);
 
 describe('Async component', () => {
@@ -28,7 +29,7 @@ describe('Async component', () => {
   test('render no post text visible when store is empty', async () => {
     //Arrange
     const initialState: RootState = {
-      auth: null,
+      auth: { email: 'foo@bar.com', isLoggedIn: true },
       global: { isLoading: false },
       plan: { allPlan: [], currentPlan: null },
     };
@@ -58,7 +59,7 @@ describe('Async component', () => {
   test('render a select and add new plan when store is not empty', async () => {
     //Arrange
     const initialState: RootState = {
-      auth: null,
+      auth: { email: 'foo@bar.com', isLoggedIn: true },
       global: { isLoading: false },
       plan: { allPlan: allPlan, currentPlan: allPlan[0] },
     };
@@ -83,5 +84,59 @@ describe('Async component', () => {
     expect(addNewPlanButton).toBeInTheDocument();
     const select = screen.getByTestId('select');
     expect(select).toBeInTheDocument();
+  });
+
+  test('render empty div when isLoading and not currentPlan', async () => {
+    //Arrange
+    const initialState: RootState = {
+      auth: { email: 'foo@bar.com', isLoggedIn: true },
+      global: { isLoading: true },
+      plan: { allPlan: [], currentPlan: null },
+    };
+    const store = mockStore(initialState);
+
+    //Act
+    render(
+      <Provider store={store}>
+        <ButtonsSubHeader />
+      </Provider>,
+      {}
+    );
+
+    //Assert
+    const helloWorldElement = screen.queryByText(
+      'There are no plan, please create one'
+    );
+    expect(helloWorldElement).toBeNull();
+    const addFirstPlanButton = screen.queryByText('Add first plan');
+    expect(addFirstPlanButton).toBeNull();
+    const addNewPlanButton = screen.queryByText('Add new plan');
+    expect(addNewPlanButton).toBeNull();
+    const select = screen.queryByTestId('select');
+    expect(select).toBeNull();
+  });
+
+  test('open dialog when button is clicked', async () => {
+    //Arrange
+    const initialState: RootState = {
+      auth: { email: 'foo@bar.com', isLoggedIn: true },
+      global: { isLoading: false },
+      plan: { allPlan: allPlan, currentPlan: allPlan[0] },
+    };
+    const store = mockStore(initialState);
+
+    //Act
+    render(
+      <Provider store={store}>
+        <ButtonsSubHeader />
+      </Provider>,
+      {}
+    );
+    const addNewPlanButton = screen.queryByText('Add new plan');
+    addNewPlanButton?.click();
+
+    //Assert
+    const dialogButton = screen.queryByText('Save');
+    expect(dialogButton).toBeInTheDocument();
   });
 });
